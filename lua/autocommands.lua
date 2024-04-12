@@ -1,6 +1,6 @@
 local autocmd = vim.api.nvim_create_autocmd
 
--- Disable the statusline, tabline and cmdline while the alpha dashboard is open
+----- Disable the statusline, tabline and cmdline while the alpha dashboard is open
 autocmd('User', {
   pattern = 'AlphaReady',
   desc = 'disable status, tabline and cmdline for alpha',
@@ -10,7 +10,8 @@ autocmd('User', {
 	  vim.opt.cmdheight = 0
   end,
   })
--- Enable the statusline, tabline and cmdline after the dashboard was opened
+
+----- Enable the statusline, tabline and cmdline after the dashboard was opened
 autocmd('BufUnload', {
   buffer = 0,
   desc = 'enable status, tabline and cmdline after alpha',
@@ -20,7 +21,8 @@ autocmd('BufUnload', {
     vim.opt.cmdheight = 1
   end,
   })
--- Closes neovim automatically when nvim-tree is the last window in the view
+
+----- Closes neovim automatically when nvim-tree is the last window in the view
 local function is_modified_buffer_open(buffers)
   for _, v in pairs(buffers) do
       if v.name:match("NvimTree_") == nil then
@@ -42,5 +44,4 @@ autocmd("BufEnter", {
       end
   end,
 })
----------------
 

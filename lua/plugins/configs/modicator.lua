@@ -9,7 +9,7 @@ local set_hl = vim.api.nvim_set_hl
 -- NOTE: Modicator requires line_numbers and cursorline to be enabled
 modicator.setup({
 	-- Show warning if any required option is missing
-	show_warnings = true,
+	-- show_warnings = true,
 	highlights = {
 		-- Default options for bold/italic. You can override these individually
 		-- for each mode if you'd like as seen below.

@@ -1,24 +1,34 @@
 local autocmd = vim.api.nvim_create_autocmd
 
------ Disable the statusline, tabline and cmdline while the alpha dashboard is open
+----- Disable the statusline, tabline and cmdline & hide cursor while the alpha dashboard is open
 autocmd('User', {
   pattern = 'AlphaReady',
-  desc = 'disable status, tabline and cmdline for alpha',
+  desc = 'disable status, tabline, cmdline & hide cursor for alpha',
   callback = function()
 	  vim.go.laststatus = 0
     vim.opt.showtabline = 0
 	  vim.opt.cmdheight = 0
+
+    local hl = vim.api.nvim_get_hl_by_name('Cursor', true)
+    hl.blend = 100
+    vim.api.nvim_set_hl(0, 'Cursor', hl)
+    vim.opt.guicursor:append('a:Cursor/lCursor')
   end,
   })
 
------ Enable the statusline, tabline and cmdline after the dashboard was opened
+----- Enable the statusline, tabline and cmdline & show cursor after the dashboard was opened
 autocmd('BufUnload', {
   buffer = 0,
-  desc = 'enable status, tabline and cmdline after alpha',
+  desc = 'enable status, tabline, cmdline & show cursor after alpha',
   callback = function()
     vim.go.laststatus = 3 
     vim.opt.showtabline = 2
     vim.opt.cmdheight = 1
+
+    local hl = vim.api.nvim_get_hl_by_name('Cursor', true)
+    hl.blend = 0
+    vim.api.nvim_set_hl(0, 'Cursor', hl)
+    vim.opt.guicursor:remove('a:Cursor/lCursor')
   end,
   })
 
@@ -44,4 +54,5 @@ autocmd("BufEnter", {
       end
   end,
 })
+
 

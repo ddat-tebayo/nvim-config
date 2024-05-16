@@ -47,7 +47,7 @@ dashboard.section.header.opts.hl = pick_color()
 
   dashboard.section.buttons.val = {
     button({shortcut = "r", hl = {{'RainbowDelimiterViolet', 2, 3}}}, "  Recently opened files", leader, ":Telescope oldfiles <CR>"),
-    button({shortcut = "e", hl = {{'RainbowDelimiterGreen', 2, 3}}}, "  New file", leader, ":ene <BAR> startinsert <CR>"),
+    button({shortcut = "n", hl = {{'RainbowDelimiterGreen', 2, 3}}}, "  New file", leader, ":ene <BAR> startinsert <CR>"),
     button({shortcut = "f", hl = {{'RainbowDelimiterCyan', 2, 3}}}, "  Find file", leader, ":cd $HOME/Workspace | Telescope find_files hidden=true path_display=smart<CR>"),
     button({shortcut = "t", hl = {{'Normal', 2, 3}}}, "  Find text", leader, ":Telescope live_grep path_display=smart<CR>"),
     button({shortcut = "p", hl = {{'RainbowDelimiterYellow', 2, 3}}}, "  Switch to project", leader, ":Telescope projects <CR>"),
@@ -59,14 +59,14 @@ dashboard.section.header.opts.hl = pick_color()
 ----- Footer section -----
 local function footer()
   local stats = require("lazy").stats()
-  local plugins_count = stats.loaded .. "/" .. stats.count
+  -- local plugins_count = stats.loaded .. "/" .. stats.count
 
   local datetime = os.date(" |  %H:%M   %d-%m-%Y | ")
 
   local version = vim.version()
   local nvim_version_info = "  v" .. version.major .. "." .. version.minor .. "." .. version.patch
   -----
-  return  plugins_count .. " plugins  " .. datetime .. nvim_version_info
+  return  stats.count .. " plugins  " .. datetime .. nvim_version_info
 end
 
 dashboard.section.footer.val = footer()

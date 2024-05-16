@@ -4,21 +4,16 @@ local g = vim.g
 local default_options = {
 
   clipboard = "unnamedplus", --allows neovim to access the system clipboard
-  completeopt = {"noinsert", "menuone", "noselect"}, --mostly just for completion
+  completeopt = {"noinsert","menu", "menuone", "noselect", "preview"}, --mostly just for completion
   fileencoding = "utf-8", --the encoding written to a file
   undofile = true, --enable persistent undo
   swapfile = false, --creates a swapfile
-
   updatetime = 300, --faster completion (4000ms default)
   timeoutlen = 100, --time to wait for a mapped sequence to complete (in milliseconds)
-
   ignorecase = true, --ignore case in search patterns
   smartcase = true, --smart case
-
   splitbelow = true, --force all horizontal splits to go below current window
   splitright = true, --force all vertical splits to go to the right of current window
-
-
   mouse = "a", --allow the mouse to be used in neovim
   showmode = false, --we don't need to see things like -- INSERT -- anymore
   wrap = false, --display lines as one long line
@@ -27,17 +22,19 @@ local default_options = {
   inccommand = "split",
   termguicolors = true, --set term gui colors
   cmdheight = 1, --more space in the neovim command line for displaying messages (default 1)
-
   expandtab = true, --convert tabs to spaces
   shiftwidth = 2, --the number of spaces inserted for each indentation
   tabstop = 2, --insert 2 spaces for a tab
-    --set numbered lines, ralative numbered lines
-  number = true,
-  relativenumber = true,
-  cursorline = true,
-    --keep the cursor to the center of screen, default is first line/last line
-  scrolloff = 8,          
-  sidescrolloff = 8,
+  number = true, --numbered lines
+  relativenumber = true, --ralative numbered lines
+  cursorline = true, --highlight the current line
+  scrolloff = 8, --minimal number of screen lines to keep above and below the cursor
+  sidescrolloff = 8, --minimal number of screen lines to keep left and right of the cursor.
+  foldcolumn = '1', --'0' is not bad
+  foldlevel = 99, -- Using ufo provider need a large value, feel free to decrease the value
+  foldlevelstart = 99,
+  foldenable = true,
+  fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]],
 }
 
 for k, v in pairs(default_options) do

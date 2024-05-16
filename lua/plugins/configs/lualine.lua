@@ -3,27 +3,10 @@ if not status then
     return
 end
 
-local hide_in_width_58 = function()
-	return vim.fn.winwidth(0) > 58
-end
-local hide_in_width_46 = function()
-	return vim.fn.winwidth(0) > 46
-end
+local navic = require("nvim-navic")
+local icons = require("utils.icons")
 
-
-local encoding = {
-  "encoding",
-  cond = hide_in_width_46
-}
-local filetype = {
-  "filetype",
-  cond = hide_in_width_46
-}
-local filename = {
-  "filename",
-  cond = hide_in_width_58
-}
-
+-- Customizing my own color theme
 local colors = {
   green = '#608c4d',
   blue = '#559dd7',
@@ -36,7 +19,7 @@ local colors = {
   white = '#eeeeee'
 }
 
-local my_theme = {
+local my_theme_colors = {
   normal = {
     a = { fg = colors.black, bg = colors.green },
     b = { fg = colors.green, bg = colors.light_grey },
@@ -63,48 +46,81 @@ local my_theme = {
   },
 }
 
-local diff = {
-	"diff",
-	symbols = { added = " ", modified = " ", removed = " " }, -- changes diff symbols 
-  cond = hide_in_width_46
-}
+-- Hide sections as the window width decreases to save space for necessary sections.
+local function min_window_width(width)
+  return function() return vim.fn.winwidth(0) > width end
+end
 
+-- Component options
 local diagnostics = {
 	"diagnostics",
-	sources = { "nvim_diagnostic" },
+  -- Table of diagnostic sources, available sources are:
+  --   'nvim_lsp', 'nvim_diagnostic', 'nvim_workspace_diagnostic', 'coc', 'ale', 'vim_lsp'.
+	sources = { "nvim_lsp" },
 	sections = { "error", "warn" },
-	symbols = { error = " ", warn = " " },
-	colored = true,
-	update_in_insert = false,
+	symbols = { error = icons.diagnostics.error, warn = icons.diagnostics.warn},
 	always_visible = true,
 }
 
+local filename = { "filename", cond = min_window_width(55) }
+local branch = { "branch", cond = min_window_width(60) }
+
+local function diff_source()
+  local gitsigns = vim.b.gitsigns_status_dict
+  if gitsigns then
+    return {
+      added = gitsigns.added,
+      modified = gitsigns.changed,
+      removed = gitsigns.removed
+    }
+  end
+end
+local diff = {
+	"diff",
+	symbols = { 
+    added = icons.git.added, 
+    modified = icons.git.modified,
+    removed =icons.git.removed
+  },
+  source = diff_source,
+  cond = min_window_width(40)
+}
+
+local encoding = { "encoding", cond = min_window_width(80) }
+local filetype = { "filetype", cond = min_window_width(80) }
+
 lualine.setup {
   options = {
-    icons_enabled = true,
-    theme = my_theme,
+    theme = my_theme_colors,
     component_separators = { left = '', right = '|'},
     section_separators = { left = '', right = ''},
-    disabled_filetypes = {},
-    always_divide_middle = true,
-    globalstatus = false,
   },
   sections = {
     lualine_a = {'mode'},
     lualine_b = {diagnostics},
     lualine_c = {filename},
-    lualine_x = {'branch', diff},
+    lualine_x = {branch, diff},
     lualine_y = {encoding, filetype},
     lualine_z = {'location'}
+  },
+  winbar = {
+    lualine_c = {
+      {
+        function()
+            return navic.get_location()
+        end,
+        cond = function()
+            return navic.is_available()
+        end
+      },
+    },
   },
   inactive_sections = {
     lualine_a = {},
     lualine_b = {},
-    lualine_c = {'filename'},
+    lualine_c = {filename},
     lualine_x = {'location'},
     lualine_y = {},
     lualine_z = {}
   },
-  tabline = {},
-  extensions = {}
 }

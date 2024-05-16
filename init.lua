@@ -3,10 +3,11 @@ if vim.loader then
 	vim.loader.enable()
 end
 
+require('core')
+require('lazyInit')
+
 vim.cmd([[colorscheme tokyonight]])
 
-require('options')
-require('autocommands')
-require('keymaps')
 
-require('lazyInit')
+
+

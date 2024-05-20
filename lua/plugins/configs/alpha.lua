@@ -46,13 +46,13 @@ dashboard.section.header.opts.hl = pick_color()
   end
 
   dashboard.section.buttons.val = {
-    button({shortcut = "r", hl = {{'RainbowDelimiterViolet', 2, 3}}}, "  Recently opened files", leader, ":Telescope oldfiles <CR>"),
-    button({shortcut = "n", hl = {{'RainbowDelimiterGreen', 2, 3}}}, "  New file", leader, ":ene <BAR> startinsert <CR>"),
-    button({shortcut = "f", hl = {{'RainbowDelimiterCyan', 2, 3}}}, "  Find file", leader, ":cd $HOME/Workspace | Telescope find_files hidden=true path_display=smart<CR>"),
-    button({shortcut = "t", hl = {{'Normal', 2, 3}}}, "  Find text", leader, ":Telescope live_grep path_display=smart<CR>"),
-    button({shortcut = "p", hl = {{'RainbowDelimiterYellow', 2, 3}}}, "  Switch to project", leader, ":Telescope projects <CR>"),
-    button({shortcut = "u", hl = {{'RainbowDelimiterBlue', 2, 3}}}, "  Update plugins", leader, ":Lazy sync<CR>"),
-    button({shortcut = "q", hl = {{'RainbowDelimiterRed', 2, 3}}}, "  Quit Neovim", leader, ":qa<CR>"),
+    button({shortcut = "r", hl = {{'RainbowDelimiterViolet', 0, 3}}}, "  Recently opened files", leader, ":Telescope oldfiles <CR>"),
+    button({shortcut = "n", hl = {{'RainbowDelimiterGreen', 0, 3}}}, "  New file", leader, ":ene <BAR> startinsert <CR>"),
+    button({shortcut = "f", hl = {{'RainbowDelimiterCyan', 0, 3}}}, "  Find file", leader, ":cd $HOME/Workspace | Telescope find_files hidden=true path_display=smart<CR>"),
+    button({shortcut = "t", hl = {{'Normal', 0, 3}}}, "  Find text", leader, ":Telescope live_grep path_display=smart<CR>"),
+    button({shortcut = "p", hl = {{'RainbowDelimiterYellow', 0, 3}}}, "  Switch to project", leader, ":Telescope projects <CR>"),
+    button({shortcut = "u", hl = {{'RainbowDelimiterBlue', 0, 3}}}, "  Update plugins", leader, ":Lazy sync<CR>"),
+    button({shortcut = "q", hl = {{'RainbowDelimiterRed', 0, 3}}}, "  Quit Neovim", leader, ":qa<CR>"),
     -- button({shortcut = leader .. " f c", hl = {{'RainbowDelimiterOrange', 2, 3}}}, "  Configuration" , leader, ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR>"),
   }
 

@@ -10,6 +10,14 @@ vim.diagnostic.config({
     prefix = "󱅶 ",
     suffix = "  ",
   },
+  float = {
+    border = "single",
+    focusable = true,
+    style = "minimal",
+    source = "always",
+    header = "",
+    prefix = "  ",
+  },
   severity_sort = true,
   signs = {},
 })
@@ -19,14 +27,18 @@ for type, icon in pairs(icons.diagnostics) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
 
------ Handlers -----
+----- Handlers (configure border of the floating windows) -----
 
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = "rounded",
-})
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  border = "rounded",
-})
+local handlers = {
+  ["textDocument/hover"] = vim.lsp.with(
+    vim.lsp.handlers.hover,
+    { border = "rounded" }
+  ),
+  ["textDocument/signatureHelp"] = vim.lsp.with(
+    vim.lsp.handlers.signature_help,
+    { border = "rounded" }
+  ),
+}
 
 require("lspconfig.ui.windows").default_options.border = "rounded"
 
@@ -63,6 +75,7 @@ local servers = { "html", "cssls", "tailwindcss", "tsserver", "prismals", "svelt
 
 for _, server in pairs(servers) do
   local opts = {
+    handlers = handlers,
     on_attach = on_attach,
     capabilities = capabilities,
   }

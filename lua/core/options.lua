@@ -18,10 +18,10 @@ local default_options = {
   showmode = false, --we don't need to see things like -- INSERT -- anymore
   wrap = false, --display lines as one long line
   hlsearch = true, --highlight all matches on previous search pattern
-  signcolumn = "yes",
-  inccommand = "split",
+  signcolumn = "yes", --always show the sign column, otherwise it would shift the text each time
+  inccommand = "split", --When nonempty, shows the effects of :substitute, :smagic, :snomagic and user commands with the :command-preview flag as you type.
   termguicolors = true, --set term gui colors
-  cmdheight = 1, --more space in the neovim command line for displaying messages (default 1)
+  cmdheight = 0, --more space in the neovim command line for displaying messages (default 1)
   expandtab = true, --convert tabs to spaces
   shiftwidth = 2, --the number of spaces inserted for each indentation
   tabstop = 2, --insert 2 spaces for a tab
@@ -30,11 +30,13 @@ local default_options = {
   cursorline = true, --highlight the current line
   scrolloff = 8, --minimal number of screen lines to keep above and below the cursor
   sidescrolloff = 8, --minimal number of screen lines to keep left and right of the cursor.
-  foldcolumn = '1', --'0' is not bad
+  foldcolumn = "1", -- '0' is not bad
   foldlevel = 99, -- Using ufo provider need a large value, feel free to decrease the value
   foldlevelstart = 99,
   foldenable = true,
   fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]],
+  list = true,
+  listchars = [[tab:▷\ ,trail: ,nbsp:○,space:.]],
 }
 
 for k, v in pairs(default_options) do

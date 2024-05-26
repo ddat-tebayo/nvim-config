@@ -14,9 +14,9 @@ M.create_select_menu = function(prompt, options_table)
   -- Return the prompt function. These global function var will be used when assigning keybindings
   local menu = function()
     vim.ui.select(
-      option_names,        --> the list we populated above
+      option_names,      --> the list we populated above
       {
-        prompt = prompt,   --> Prompt passed as the argument Remove this variable if you want to keep the numbering in front of option names
+        prompt = prompt, --> Prompt passed as the argument Remove this variable if you want to keep the numbering in front of option names
         format_item = function(item)
           return item:gsub("%d. ", "")
         end,
@@ -40,62 +40,62 @@ M.create_select_menu = function(prompt, options_table)
 end
 -----------------------------
 
-function M.lsp_keymaps(bufnr)
+function M.lsp_keymaps()
   vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
     callback = function(ev)
       local bufnr = ev.buf
-      local client = vim.lsp.get_client_by_id(ev.data.client_id)
       vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-      local function opts(desc)
-        return { noremap = true, silent = true, buffer = bufnr, desc = desc }
+      local function opts(desc, expr)
+        return { noremap = true, silent = true, buffer = bufnr, desc = desc, expr = expr or false }
       end
 
-      map("n", "<space>l<leader>", function()
-        local options = {
-          ["1. Start LSP"] = "LspStart",
-          ["2. Stop LSP"] = "LspStop",
-          ["3. Restart LSP"] = "LspRestart",
-          ["4. Lsp Info"] = "LspInfo",
-          ["5. Lsp Log"] = "LspLog",
-          ["6. Toggle LSP Diagnostics"] = "ToggleLspDiag",
-          ["7. Toggle InlayHints"] = "ToggleInlayHints",
-        }
-        M.create_select_menu("Lsp Options", options)()
-      end, opts("Lsp Menu Options"))
+      map(
+        "n", "<leader>c<leader>", function()
+          local options = {
+            ["1. Start LSP"] = "LspStart",
+            ["2. Stop LSP"] = "LspStop",
+            ["3. Restart LSP"] = "LspRestart",
+            ["4. Lsp Info"] = "LspInfo",
+            ["5. Lsp Log"] = "LspLog",
+            ["6. Toggle LSP Diagnostics"] = "ToggleLspDiag",
+            ["7. Toggle InlayHints"] = "ToggleInlayHints",
+          }
+          M.create_select_menu("Lsp Options", options)()
+        end,
+        opts("LSP Menu Options")
+      )
 
       -- set keybinds
-      map("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts("Go to definitions"))
-      map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
-      map("n", "gI", "<cmd>Telescope lsp_implementations<CR>", opts("Go to implementations"))
-      map("n", "gR", "<cmd>Telescope lsp_references<CR>", opts("Show LSP references"))
-      map("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts("Go to type definition"))
+      map("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts("Goto definitions"))
+      map("n", "gD", vim.lsp.buf.declaration, opts("Goto declaration"))
+      map("n", "gI", "<cmd>Telescope lsp_implementations<CR>", opts("Goto implementations"))
+      map("n", "gr", "<cmd>Telescope lsp_references<CR>", opts("Show LSP references"))
+      map("n", "gy", "<cmd>Telescope lsp_type_definitions<CR>", opts("Goto T[y]pe definition"))
 
-      map("n", "<leader>la", vim.lsp.buf.code_action, opts("Code Actions"))
+      map("n", "<leader>ca", vim.lsp.buf.code_action, opts("Code Actions"))
 
-      map("n", "<leader>lf", "<cmd>LspFormat<cr>", opts("Format"))
+      map("n", "<leader>cf", "<cmd>LspFormat<cr>", opts("Format"))
 
       map("n", "K", vim.lsp.buf.hover, opts("Hover documentation"))
 
-      map("n", "<leader>lh", vim.lsp.buf.signature_help, opts("LSP Signature help"))
+      map("n", "<leader>ch", vim.lsp.buf.signature_help, opts("LSP Signature help"))
       map("i", "<C-h>", vim.lsp.buf.signature_help, opts("LSP Signature help"))
 
-      map("n", "<leader>lL", vim.lsp.codelens.refresh, opts("Refresh & Display Codelens"))
-      map("n", "<leader>ll", vim.lsp.codelens.run, opts("Run Codelens"))
+      map("n", "<leader>cC", vim.lsp.codelens.refresh, opts("Refresh & Display Codelens"))
+      map("n", "<leader>cc", vim.lsp.codelens.run, opts("Run Codelens"))
 
-      map("n", "<leader>ls", "<cmd>Telescope lsp_document_symbols<cr>", opts("Document Symbols"))
-      map("n", "<leader>lS", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts("Workspace Symbols"))
-
-      map("n", "<leader>lq", vim.diagnostic.setloclist, opts("Quickfix"))
+      map("n", "<leader>ss", "<cmd>Telescope lsp_document_symbols<cr>", opts("Document Symbols"))
+      map("n", "<leader>sS", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts("Workspace Symbols"))
 
       map(
         "n", "<leader>cr",
         -- use inc-rename.nvim plugin or "vim.lsp.buf.rename"
         function()
           return ":IncRename " .. vim.fn.expand("<cword>")
-        end, { expr = true },
-        opts("Smart rename")
+        end,
+        opts("Smart rename", true)
       )
     end,
   })
@@ -126,15 +126,7 @@ cmd("ToggleLspDiag", function()
 end, {})
 
 cmd("ToggleInlayHints", function()
-  local ih = vim.lsp.buf.inlay_hint or vim.lsp.inlay_hint
-  if type(ih) == "function" then
-    ih(buf, value)
-  elseif type(ih) == "table" and ih.enable then
-    if value == nil then
-      value = not ih.is_enabled({ bufnr = buf or 0 })
-    end
-    ih.enable(value, { bufnr = buf })
-  end
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
 end, {})
 
 cmd("LspFormat", function()
@@ -144,4 +136,3 @@ end, { desc = "Format with LSP" })
 ------------------------------
 
 return M
-

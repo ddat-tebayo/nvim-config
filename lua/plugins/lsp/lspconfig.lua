@@ -61,8 +61,8 @@ capabilities.textDocument.foldingRange = {
 
 ----- On attach -----
 
-local on_attach = function(client, bufnr)
-  require('plugins.lsp.lsp_keymaps').lsp_keymaps(bufnr)
+local on_attach = function(client)
+  require('plugins.lsp.lsp_keymaps').lsp_keymaps()
 
   --  Inlay hints: I have temporarily disabled inlay hints because I am not yet familiar with using.
   if client.supports_method "textDocument/inlayHint" then
@@ -71,8 +71,7 @@ local on_attach = function(client, bufnr)
 end
 
 ------------------------------
-local servers = { "html", "cssls", "tailwindcss", "tsserver", "prismals", "svelte", "pyright", "lua_ls", "graphql",
-  "emmet_ls" }
+local servers = { "html", "cssls", "tailwindcss", "tsserver", "prismals", "svelte", "pyright", "lua_ls", "graphql", "emmet_ls" }
 
 for _, server in pairs(servers) do
   local opts = {

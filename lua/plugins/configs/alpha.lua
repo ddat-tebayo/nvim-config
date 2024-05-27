@@ -17,44 +17,47 @@ dashboard.section.header.val = require("utils.dashboard_imgs").random()
 dashboard.section.header.opts.hl = pick_color()
 
 ----- Buttons section -----
-  local leader = '<LD>'
+local leader = '<SPC>'
 
-  local function button(usr_opts, txt, leader_txt, keybind, keybind_opts)
-    
-    local default_opts = {
-      position = 'center',
-      cursor = 5,
-      width = 50,
-      align_shortcut = 'right',
-      hl_shortcut = 'Number'
-    }
-    local opts = vim.tbl_deep_extend('force', default_opts, usr_opts)
-    
-    local sc_after = usr_opts.shortcut:gsub('%s', ''):gsub(leader_txt, '<leader>')
+local function button(hl_group, sc, txt, keybind, keybind_opts, opts )
+  local default_opts = {
+    position = 'center',
+    cursor = 5,
+    width = 50,
+    align_shortcut = 'right',
+    hl_shortcut = 'Number'
+  }
 
-    local function on_press()
-      local key = vim.api.nvim_replace_termcodes(keybind or sc_after .. '<Ignore>', true, false, true)
-      vim.api.nvim_feedkeys(key, 't', false)
-    end
+  local opts = opts and vim.tbl_deep_extend('force', default_opts, opts) or default_opts
+  
+  opts.hl = {{hl_group, 0, 3}} -- only highlight icon
 
-    if keybind then
-      keybind_opts = vim.F.if_nil(keybind_opts, { noremap = true, silent = true, nowait = true })
-      opts.keymap = { 'n', sc_after, keybind, keybind_opts }
-    end
+  opts.shortcut = sc
+  local sc_after = sc:gsub('%s', ''):gsub(leader, '<leader>')
 
-    return { type = 'button', val = txt, on_press = on_press, opts = opts, }
+  local function on_press()
+    local key = vim.api.nvim_replace_termcodes(keybind or sc_after .. '<Ignore>', true, false, true)
+    vim.api.nvim_feedkeys(key, 't', false)
   end
 
-  dashboard.section.buttons.val = {
-    button({shortcut = "r", hl = {{'RainbowDelimiterViolet', 0, 3}}}, "  Recently opened files", leader, ":Telescope oldfiles <CR>"),
-    button({shortcut = "n", hl = {{'RainbowDelimiterGreen', 0, 3}}}, "  New file", leader, ":ene <BAR> startinsert <CR>"),
-    button({shortcut = "f", hl = {{'RainbowDelimiterCyan', 0, 3}}}, "  Find file", leader, ":cd $HOME/Workspace | Telescope find_files hidden=true path_display=smart<CR>"),
-    button({shortcut = "t", hl = {{'Normal', 0, 3}}}, "  Find text", leader, ":Telescope live_grep path_display=smart<CR>"),
-    button({shortcut = "p", hl = {{'RainbowDelimiterYellow', 0, 3}}}, "  Switch to project", leader, ":Telescope projects <CR>"),
-    button({shortcut = "u", hl = {{'RainbowDelimiterBlue', 0, 3}}}, "  Update plugins", leader, ":Lazy sync<CR>"),
-    button({shortcut = "q", hl = {{'RainbowDelimiterRed', 0, 3}}}, "  Quit Neovim", leader, ":qa<CR>"),
-    -- button({shortcut = leader .. " f c", hl = {{'RainbowDelimiterOrange', 2, 3}}}, "  Configuration" , leader, ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR>"),
-  }
+  if keybind then
+    keybind_opts = vim.F.if_nil(keybind_opts, { noremap = true, silent = true, nowait = true })
+    opts.keymap = { 'n', sc_after, keybind, keybind_opts }
+  end
+
+  return { type = 'button', val = txt, on_press = on_press, opts = opts}
+end
+  
+dashboard.section.buttons.val = {
+  button('RainbowDelimiterViolet', "r", "  Recently opened files", "<cmd>Telescope oldfiles<cr>"),
+  button('RainbowDelimiterGreen', "n", "  New file", ":ene <BAR> startinsert <CR>"),
+  button('RainbowDelimiterCyan', "f", "  Find file", ":cd $HOME/Workspace | Telescope find_files hidden=true path_display=smart<CR>"),
+  button('RainbowDelimiterBlue', "t", "  Find text", ":Telescope live_grep path_display=smart<CR>"),
+  button('RainbowDelimiterYellow', "p", "  Switch to project", ":Telescope projects <CR>"),
+  button('RainbowDelimiterBlue', "u", "  Update plugins", ":Lazy sync<CR>"),
+  button('RainbowDelimiterRed', "q", "  Quit Neovim", ":qa<CR>"),
+  -- button('RainbowDelimiterOrange', leader .. " c f", "  Configuration", ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR>")
+}
 
 ----- Footer section -----
 local function footer()
@@ -75,7 +78,7 @@ dashboard.section.footer.opts.hl = "RainbowDelimiterGreen"
 ----- Quote or texts section -----
 local custom_texts = {
   type = "text",
-  val = "Coup de Burst at the ready !",
+  val = "󰀱 Coup de Burst at the ready 󱓞",
   opts = {
     position = "center",
     hl = "RainbowDelimiterCyan",

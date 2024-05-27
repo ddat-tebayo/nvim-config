@@ -15,29 +15,20 @@ return {
             require("plugins.configs.telescope")
         end,
         dependencies = {
-          -- Native telescope sorter to significantly improve sorting performance.
-          -- You have to install 'fzf', 'make' and 'gcc'
-          'nvim-telescope/telescope-fzf-native.nvim',
-          build = 'make',
-          config = function()
-            require("telescope").load_extension("fzf")
-          end,
+			-- Native telescope sorter to significantly improve sorting performance.
+			-- You have to install 'fzf', 'make' and 'gcc'
+			{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+			
+			-- The superior project management solution for neovim.
+			-- Access your recently opened projects from telescope!
+			{ 'ahmedkhalf/project.nvim' },
         }
-    },
-
-    -- The superior project management solution for neovim.
-    -- Access your recently opened projects from telescope!
-    {
-        'ahmedkhalf/project.nvim',
-        config = function()
-            require("project_nvim").setup {}
-        end,
     },
 
     -- A pretty diagnostics, references, telescope results, quickfix and location list to help you solve all the trouble your code is causing.
     {
         'folke/trouble.nvim',
-        opts = {},
+        opts = { use_diagnostic_signs = true },
     },
 
     -- A neovim lua plugin to help easily manage multiple terminal windows
@@ -72,13 +63,21 @@ return {
     -- Smart and powerful comment plugin for neovim. Supports treesitter, dot repeat, left-right/up-down motions, hooks, and more
     {
         'numToStr/Comment.nvim',
-        opts = {}
-    },
-
-    -- Highlight, list and search todo comments in your projects
-    {
-        "folke/todo-comments.nvim",
-        opts = {}
+        opts = {},
+		dependencies = {
+			-- Tiny plugin to enhance Neovim's native comments
+			{
+				"folke/ts-comments.nvim",
+				opts = {},
+				event = "VeryLazy",
+				enabled = vim.fn.has("nvim-0.10.0") == 1,
+			}
+			-- Highlight, list and search todo comments in your projects
+		    {
+		        "folke/todo-comments.nvim",
+		        opts = {}
+		    },
+		}
     },
 
     -- Simple winbar/statusline plugin that shows your current code context
@@ -105,28 +104,12 @@ return {
         end,
         dependencies = {
             'kevinhwang91/promise-async',
+			
+			-- Status column plugin that provides a configurable 'statuscolumn' and click handlers
+        	-- getting rid of folding level numbers in nvim-ufo
             {
-                -- Status column plugin that provides a configurable 'statuscolumn' and click handlers
-                -- getting rid of folding level numbers in nvim-ufo
                 'luukvbaal/statuscol.nvim',
                 event = "VeryLazy",
-                opts = function()
-                    local builtin = require('statuscol.builtin')
-                    return {
-                      setopt = true,
-                      relculright = true,
-                      -- segments (sign -> line number + separator -> fold)
-                      segments = {
-                        { text = { ' %s' }, click = 'v:lua.ScSa' },
-                        {
-                          text = { builtin.lnumfunc, ' ' },
-                          condition = { true, builtin.not_empty },
-                          click = 'v:lua.ScLa',
-                        },
-                        { text = { builtin.foldfunc, '  ' }, click = 'v:lua.ScFa' },
-                      },
-                    }
-                end,
             },
         },
     },

@@ -71,7 +71,8 @@ local on_attach = function(client)
 end
 
 ------------------------------
-local servers = { "html", "cssls", "tailwindcss", "tsserver", "prismals", "svelte", "pyright", "lua_ls", "graphql", "emmet_ls" }
+local servers = { "html", "cssls", "tailwindcss", "tsserver", "prismals", "svelte", "pyright", "lua_ls", "graphql",
+  "emmet_ls" }
 
 for _, server in pairs(servers) do
   local opts = {

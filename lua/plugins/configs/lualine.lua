@@ -1,6 +1,6 @@
 local status, lualine = pcall(require, "lualine")
 if not status then
-    return
+  return
 end
 
 local navic = require("nvim-navic")
@@ -53,13 +53,13 @@ end
 
 -- Component options
 local diagnostics = {
-	"diagnostics",
+  "diagnostics",
   -- Table of diagnostic sources, available sources are:
   --   'nvim_lsp', 'nvim_diagnostic', 'nvim_workspace_diagnostic', 'coc', 'ale', 'vim_lsp'.
-	sources = { "nvim_lsp" },
-	sections = { "error", "warn" },
-	symbols = { error = icons.diagnostics.error, warn = icons.diagnostics.warn},
-	always_visible = true,
+  sources = { "nvim_lsp" },
+  sections = { "error", "warn" },
+  symbols = { error = icons.diagnostics.error, warn = icons.diagnostics.warn },
+  always_visible = true,
 }
 
 local filename = { "filename", cond = min_window_width(55) }
@@ -76,11 +76,11 @@ local function diff_source()
   end
 end
 local diff = {
-	"diff",
-	symbols = { 
-    added = icons.git.added, 
+  "diff",
+  symbols = {
+    added = icons.git.added,
     modified = icons.git.modified,
-    removed =icons.git.removed
+    removed = icons.git.removed
   },
   source = diff_source,
   cond = min_window_width(40)
@@ -92,25 +92,25 @@ local filetype = { "filetype", cond = min_window_width(80) }
 lualine.setup {
   options = {
     theme = my_theme_colors,
-    component_separators = { left = '', right = '|'},
-    section_separators = { left = '', right = ''},
+    component_separators = { left = '', right = '|' },
+    section_separators = { left = '', right = '' },
   },
   sections = {
-    lualine_a = {'mode'},
-    lualine_b = {diagnostics},
-    lualine_c = {filename},
-    lualine_x = {branch, diff},
-    lualine_y = {encoding, filetype},
-    lualine_z = {'location'}
+    lualine_a = { 'mode' },
+    lualine_b = { diagnostics },
+    lualine_c = { filename },
+    lualine_x = { branch, diff },
+    lualine_y = { encoding, filetype },
+    lualine_z = { 'location' }
   },
   winbar = {
     lualine_c = {
       {
         function()
-            return navic.get_location()
+          return navic.get_location()
         end,
         cond = function()
-            return navic.is_available()
+          return navic.is_available()
         end
       },
     },
@@ -118,8 +118,8 @@ lualine.setup {
   inactive_sections = {
     lualine_a = {},
     lualine_b = {},
-    lualine_c = {filename},
-    lualine_x = {'location'},
+    lualine_c = { filename },
+    lualine_x = { 'location' },
     lualine_y = {},
     lualine_z = {}
   },

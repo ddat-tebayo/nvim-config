@@ -28,7 +28,7 @@ local border = {
 local has_words_before = function()
   if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
 end
 
 cmp.setup {
@@ -50,61 +50,61 @@ cmp.setup {
     ['C-j'] = cmp.mapping.select_next_item(), -- next suggestion
     ['C-b'] = cmp.mapping.scroll_docs(-4),
     ['C-f'] = cmp.mapping.scroll_docs(4),
-    ['C-Space'] = cmp.mapping.complete(),  -- show completion suggestions
-    ['C-e'] = cmp.mapping.abort(), -- close completion window
+    ['C-Space'] = cmp.mapping.complete(), -- show completion suggestions
+    ['C-e'] = cmp.mapping.abort(),        -- close completion window
     ['<CR>'] = cmp.mapping.confirm({
       behavior = cmp.ConfirmBehavior.Replace,
       select = false,
     }),
     ['<Tab>'] = cmp.mapping(function(fallback)
-        if cmp.visible() and has_words_before() then
-          cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-        elseif require('luasnip').expand_or_jumpable() then
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>luasnip-expand-or-jump", true, true, true), "")
-        else
-          fallback()
-        end
-      end, { "i", "s",}
+      if cmp.visible() and has_words_before() then
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+      elseif require('luasnip').expand_or_jumpable() then
+        vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>luasnip-expand-or-jump", true, true, true), "")
+      else
+        fallback()
+      end
+    end, { "i", "s", }
     ),
 
     ['<S-Tab>'] = cmp.mapping(function(fallback)
-        if cmp.visible() and has_words_before() then
-          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-        elseif require('luasnip').jumpable(-1) then
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>luasnip-jump-prev", true, true, true), "")
-        else
-          fallback()
-        end
-      end, { "i", "s",}
+      if cmp.visible() and has_words_before() then
+        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+      elseif require('luasnip').jumpable(-1) then
+        vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>luasnip-jump-prev", true, true, true), "")
+      else
+        fallback()
+      end
+    end, { "i", "s", }
     ),
   }),
 
   sources = cmp.config.sources({
-    { name = 'nvim_lsp'},
-    { name = 'nvim_lua'},
-		{ name = "luasnip",},
-		{ name = "buffer",},
-    { name = "path",},
-    { name = "copilot",},
-		-- { name = "emoji"},
-		-- { name = "calc"},
-  }), 
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
+    { name = "luasnip", },
+    { name = "buffer", },
+    { name = "path", },
+    { name = "copilot", },
+    -- { name = "emoji"},
+    -- { name = "calc"},
+  }),
   formatting = {
     fields = { "menu", "abbr", "kind" },
     format = lspkind.cmp_format({
-      before = function (entry, vim_item)
+      before = function(entry, vim_item)
         local icons = require("utils.icons").kinds
         if icons[vim_item.kind] then
           vim_item.kind = icons[vim_item.kind] .. vim_item.kind
         end
 
-      	local duplicates = {
-          buffer = 1, 
+        local duplicates = {
+          buffer = 1,
           path = 1,
           nvim_lsp = 0,
           luasnip = 1,
         }
-        
+
         vim_item.menu = ({
           nvim_lsp = '[λ LSP]',
           luasnip = '[󰘦 Snippet]',

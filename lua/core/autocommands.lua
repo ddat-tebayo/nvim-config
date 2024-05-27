@@ -17,7 +17,7 @@ autocmd('User', {
     vim.go.laststatus = 0
     vim.opt.showtabline = 0
 
-    local hl = vim.api.nvim_get_hl(0, {name = 'Cursor', link = false})
+    local hl = vim.api.nvim_get_hl(0, { name = 'Cursor', link = false })
     hl.blend = 100
     vim.api.nvim_set_hl(0, 'Cursor', hl)
     vim.opt.guicursor:append('a:Cursor/lCursor')
@@ -32,7 +32,7 @@ autocmd('BufUnload', {
     vim.go.laststatus = 3
     vim.opt.showtabline = 2
 
-    local hl = vim.api.nvim_get_hl(0, {name = 'Cursor', link = true})
+    local hl = vim.api.nvim_get_hl(0, { name = 'Cursor', link = true })
     hl.blend = 0
     vim.api.nvim_set_hl(0, 'Cursor', hl)
     vim.opt.guicursor:remove('a:Cursor/lCursor')

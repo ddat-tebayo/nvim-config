@@ -29,7 +29,7 @@ vim.g.maplocalleader = " "
 -- Basic Keymaps
 map("i", "jk", "<ESC>", get_opts("Exit Insert Mode"))
 map("n", ";", ":", get_opts('Command Mode'))
-map({"n","i"}, "<C-s>", "<cmd>w!<cr>", get_opts('Save'))
+map({ "n", "i" }, "<C-s>", "<cmd>w!<cr>", get_opts('Save'))
 map("n", "<C-a>", "gg<S-v>G", get_opts('Select all'))
 
 -- Movement
@@ -41,7 +41,9 @@ map("n", "+", "<C-a>", get_opts('Increment'))
 map("n", "-", "<C-x>", get_opts('Decrement'))
 
 -- -- Navigate buffers
-map("n", "<leader>b", "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>", get_opts("Select buffer"))
+map("n", "<leader>b",
+  "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
+  get_opts("Select buffer"))
 map("n", "<S-l>", ":bnext<CR>", get_opts('Next Buffer'))
 map("n", "<S-h>", ":bprevious<CR>", get_opts('Previous Buffer'))
 

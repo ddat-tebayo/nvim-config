@@ -5,5 +5,3 @@ end
 
 require('core')
 require('lazyInit')
-
-vim.cmd([[colorscheme tokyonight]])

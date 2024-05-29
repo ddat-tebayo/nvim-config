@@ -72,7 +72,8 @@ return {
         opts = {},
         event = "VeryLazy",
         enabled = vim.fn.has("nvim-0.10.0") == 1,
-      }
+      },
+
       -- Highlight, list and search todo comments in your projects
       {
         "folke/todo-comments.nvim",
@@ -104,7 +105,7 @@ return {
       require('plugins.configs.ufo')
     end,
     dependencies = {
-      'kevinhwang91/promise-async',
+      {'kevinhwang91/promise-async'},
 
       -- Status column plugin that provides a configurable 'statuscolumn' and click handlers
       -- getting rid of folding level numbers in nvim-ufo

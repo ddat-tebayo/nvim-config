@@ -1,3 +1,4 @@
+-------------------- UFO config --------------------
 local status, ufo = pcall(require, "ufo")
 if not status then
   return
@@ -33,29 +34,34 @@ local handler = function(virtText, lnum, endLnum, width, truncate)
 end
 
 ufo.setup({
+  -- close_fold_kinds_for_ft = {
+  --   default = {"imports", "comment"},
+  --   json = {"array"},
+  --   c = {"comment", "region"},
+  -- },
   provider_selector = function(bufnr, filetype, buftype)
-    -- Option 2: nvim lsp as LSP client
-    -- Tell the server the capability of foldingRange,
-    -- Neovim hasn't added foldingRange to default capabilities, users must add it manually
-    return { 'lsp', 'indent' }
-
-    -- Option 3: treesitter as a main provider instead
-    -- (Note: the `nvim-treesitter` plugin is *not* needed.)
-    -- ufo uses the same query files for folding (queries/<lang>/folds.scm)
-    -- performance and stability are better than `foldmethod=nvim_treesitter#foldexpr()`
     -- return {'treesitter', 'indent'}
+    return { 'lsp', 'indent' }
   end,
   fold_virt_text_handler = handler
 })
 
-vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
-vim.keymap.set('n', 'zr', require('ufo').openFoldsExceptKinds)
-vim.keymap.set('n', 'zm', require('ufo').closeFoldsWith) -- closeAllFolds == closeFoldsWith(0)
-vim.keymap.set('n', 'K', function()
-  local winid = require('ufo').peekFoldedLinesUnderCursor()
-  if not winid then
-    vim.lsp.buf.hover()
-  end
-end)
+-------------------- Statuscol config --------------------
+local builtin = require('statuscol.builtin')
 
+require("statuscol").setup({
+  setopt = true,
+  relculright = true,
+  ft_ignore = { "NvimTree", "toggleterm" },
+  bt_ignore = nil,
+  -- -- segments (sign -> linenumber + separator -> fold)
+  segments = {
+    { text = { ' %s' }, click = 'v:lua.ScSa' },
+    {
+      text = { builtin.lnumfunc, ' ' },
+      condition = { true, builtin.not_empty },
+      click = 'v:lua.ScLa',
+    },
+    { text = { builtin.foldfunc, '  ' }, click = 'v:lua.ScFa' },
+  }
+})
